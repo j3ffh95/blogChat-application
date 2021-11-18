@@ -5,6 +5,7 @@ let User = function (data) {
 };
 
 User.prototype.validate = function () {
+  // Validation for the fields if they are empty
   if (this.data.username == "") {
     this.errors.push("You must provide a username.");
   }
@@ -13,6 +14,13 @@ User.prototype.validate = function () {
   }
   if (this.data.password == "") {
     this.errors.push("You must provide a password.");
+  }
+  // Validate the password length
+  if (this.data.password.length > 0 && this.data.password.length < 12) {
+    this.errors.push("Password must be at least 12 characters.");
+  }
+  if (this.data.password.length > 100) {
+    this.errors.push("Password cannot exceed 100 characters");
   }
 };
 
