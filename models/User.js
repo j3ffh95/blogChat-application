@@ -16,10 +16,10 @@ User.prototype.cleanUp = function () {
   if (typeof this.data.password != "string") {
     this.data.password = "";
   }
-  // Get rid of any bogus properties, make sure the data is the properties we need
+  // Get rid of any bogus properties, make sure the data is the properties we need by updating the data  object
   this.data = {
-    username: this.data.username,
-    email: this.data.email,
+    username: this.data.username.trim(),
+    email: this.data.email.trim(),
     password: this.data.password,
   };
 };
