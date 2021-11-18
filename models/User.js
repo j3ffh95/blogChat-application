@@ -15,12 +15,18 @@ User.prototype.validate = function () {
   if (this.data.password == "") {
     this.errors.push("You must provide a password.");
   }
-  // Validate the password length
+  // Validate the fields length
   if (this.data.password.length > 0 && this.data.password.length < 12) {
     this.errors.push("Password must be at least 12 characters.");
   }
   if (this.data.password.length > 100) {
     this.errors.push("Password cannot exceed 100 characters");
+  }
+  if (this.data.username.length > 0 && this.data.username.length < 3) {
+    this.errors.push("username must be at least 3 characters.");
+  }
+  if (this.data.username.length > 30) {
+    this.errors.push("username cannot exceed 30 characters");
   }
 };
 
