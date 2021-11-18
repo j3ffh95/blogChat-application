@@ -1,3 +1,5 @@
+const User = require("../models/User");
+
 exports.login = function () {};
 exports.logout = function () {};
 exports.register = function (req, res) {
