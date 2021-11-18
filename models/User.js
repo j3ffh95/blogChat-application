@@ -6,6 +6,7 @@ let User = function (data) {
   this.errors = [];
 };
 
+// This cleanUp func makes sure the input fields are type of strings
 User.prototype.cleanUp = function () {
   if (typeof this.data.username != "string") {
     this.data.username = "";
