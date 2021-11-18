@@ -6,6 +6,12 @@ let User = function (data) {
   this.errors = [];
 };
 
+User.prototype.cleanUp = function () {
+  if (typeof this.data.username != "string") {
+    this.data.username = "";
+  }
+};
+
 User.prototype.validate = function () {
   // Validation for the fields if they are empty
   if (this.data.username == "") {
@@ -39,6 +45,8 @@ User.prototype.validate = function () {
 };
 
 User.prototype.register = function () {
+  // call the clean up function to make sure the fields are strings.
+  this.cleanUp();
   // Step 1: Validate user data
   this.validate();
   // Step 2: Only if there are no vaildation errors then save the user data into a database
