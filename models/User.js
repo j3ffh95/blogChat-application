@@ -18,8 +18,8 @@ User.prototype.cleanUp = function () {
   }
   // Get rid of any bogus properties, make sure the data is the properties we need by updating the data  object
   this.data = {
-    username: this.data.username.trim(),
-    email: this.data.email.trim(),
+    username: this.data.username.trim().toLowerCase(),
+    email: this.data.email.trim().toLowerCase(),
     password: this.data.password,
   };
 };
