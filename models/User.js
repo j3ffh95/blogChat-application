@@ -1,3 +1,5 @@
+const validator = require("validator");
+
 // This is our constructor function (Blueprint)
 let User = function (data) {
   this.data = data;
