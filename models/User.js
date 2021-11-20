@@ -64,6 +64,9 @@ User.prototype.register = function () {
   // Step 1: Validate user data
   this.validate();
   // Step 2: Only if there are no vaildation errors then save the user data into a database
+  if (!this.errors.length) {
+    usersCollection.insertOne(this.data);
+  }
 };
 
 module.exports = User;
