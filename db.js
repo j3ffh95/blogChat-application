@@ -6,5 +6,7 @@ const connectionString =
 mongodb.connect(
   connectionString,
   { useNewUrlParser: true, useUnifiedTopology: true },
-  function (err, client) {}
+  function (err, client) {
+    client.db();
+  }
 );
