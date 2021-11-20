@@ -65,6 +65,7 @@ User.prototype.register = function () {
   this.validate();
   // Step 2: Only if there are no vaildation errors then save the user data into a database
   if (!this.errors.length) {
+    // If there are no errors then CREATE a user in the users collection and pass through it the object of this.data
     usersCollection.insertOne(this.data);
   }
 };
