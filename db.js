@@ -7,6 +7,6 @@ mongodb.connect(
   connectionString,
   { useNewUrlParser: true, useUnifiedTopology: true },
   function (err, client) {
-    client.db();
+    module.exports = client.db();
   }
 );
