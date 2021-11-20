@@ -1,3 +1,4 @@
+const usersCollection = require("../db").collection("users");
 const validator = require("validator");
 
 // This is our constructor function (Blueprint)
