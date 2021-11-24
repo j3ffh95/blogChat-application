@@ -3,7 +3,7 @@ dotenv.config();
 const mongodb = require("mongodb");
 
 mongodb.connect(
-  connectionString,
+  process.env.CONNECTIONSTRING,
   { useNewUrlParser: true, useUnifiedTopology: true },
   function (err, client) {
     module.exports = client.db();
