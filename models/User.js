@@ -58,6 +58,20 @@ User.prototype.validate = function () {
   }
 };
 
+User.prototype.login = function () {
+  this.cleanUp();
+  usersCollection.findOne(
+    { username: this.data.username },
+    (err, attemptedUser) => {
+      if (attemptedUser && attemptedUser.password == this.data.password) {
+        console.log("congrats");
+      } else {
+        console.log("invalid");
+      }
+    }
+  );
+};
+
 User.prototype.register = function () {
   // call the clean up function to make sure the fields are strings.
   this.cleanUp();
