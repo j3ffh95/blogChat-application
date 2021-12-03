@@ -58,15 +58,15 @@ User.prototype.validate = function () {
   }
 };
 
-User.prototype.login = function () {
+User.prototype.login = function (callback) {
   this.cleanUp();
   usersCollection.findOne(
     { username: this.data.username },
     (err, attemptedUser) => {
       if (attemptedUser && attemptedUser.password == this.data.password) {
-        console.log("congrats");
+        callback("Congrats!!!");
       } else {
-        console.log("invalid");
+        callback("Invalid");
       }
     }
   );
