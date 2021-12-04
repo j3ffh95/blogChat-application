@@ -65,9 +65,9 @@ User.prototype.login = function () {
       { username: this.data.username },
       (err, attemptedUser) => {
         if (attemptedUser && attemptedUser.password == this.data.password) {
-          callback("Congrats!!!");
+          resolve("Congrats!!!");
         } else {
-          callback("Invalid");
+          reject("Invalid");
         }
       }
     );
