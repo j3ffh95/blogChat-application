@@ -7,7 +7,9 @@ exports.login = function (req, res) {
     .then(function (result) {
       res.send(result);
     })
-    .catch();
+    .catch(function (error) {
+      res.send(error);
+    });
 };
 exports.logout = function () {};
 exports.register = function (req, res) {
