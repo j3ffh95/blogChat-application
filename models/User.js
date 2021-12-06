@@ -61,16 +61,18 @@ User.prototype.validate = function () {
 User.prototype.login = function () {
   return new Promise((resolve, reject) => {
     this.cleanUp();
-    usersCollection.findOne(
-      { username: this.data.username },
-      (err, attemptedUser) => {
+    usersCollection
+      .findOne({ username: this.data.username })
+      .then(attemptedUser => {
         if (attemptedUser && attemptedUser.password == this.data.password) {
           resolve("Congrats!!!");
         } else {
           reject("Invalid");
         }
-      }
-    );
+      })
+      .catch(function () {
+        reject("Please try again later.");
+      });
   });
 };
 
