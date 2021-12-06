@@ -59,7 +59,7 @@ User.prototype.validate = function () {
 };
 
 User.prototype.login = function () {
-  return new Promise((resolve, rejecy) => {
+  return new Promise((resolve, reject) => {
     this.cleanUp();
     usersCollection.findOne(
       { username: this.data.username },
