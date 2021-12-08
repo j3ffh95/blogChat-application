@@ -86,6 +86,7 @@ User.prototype.register = function () {
   if (!this.errors.length) {
     // Hash user password
     let salt = bcrypt.genSaltSync(10);
+    this.data.password = bcrypt.hasSync(this.data.password, salt);
     // If there are no errors then CREATE a user in the users collection and pass through it the object of this.data
     usersCollection.insertOne(this.data);
   }
