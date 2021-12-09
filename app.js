@@ -10,6 +10,8 @@ let sessionOptions = session({
   cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
 });
 
+app.use(sessionOptions);
+
 // HTML Form submit - let express know to add the user submitted data onto our request object, so then we can access it from request.body
 app.use(express.urlencoded({ extended: false }));
 // Let express know about sending Json data
