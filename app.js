@@ -3,6 +3,13 @@ const session = require("express-session");
 const router = require("./router");
 const app = express();
 
+let sessionOptions = session({
+  secret: "JavaScript is so cool",
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
+});
+
 // HTML Form submit - let express know to add the user submitted data onto our request object, so then we can access it from request.body
 app.use(express.urlencoded({ extended: false }));
 // Let express know about sending Json data
