@@ -5,6 +5,7 @@ exports.login = function (req, res) {
   user
     .login()
     .then(function (result) {
+      req.session.user = { username: user.data.username };
       res.send(result);
     })
     .catch(function (error) {
@@ -22,5 +23,9 @@ exports.register = function (req, res) {
   }
 };
 exports.home = function (req, res) {
-  res.render("home-guest");
+  if (req.session.user) {
+    res.send("welcome to the actual application!!!");
+  } else {
+    res.render("home-guest");
+  }
 };
