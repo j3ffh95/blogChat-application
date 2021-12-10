@@ -6,6 +6,7 @@ const app = express();
 
 let sessionOptions = session({
   secret: "JavaScript is so cool",
+  store: new MongoStore({ client: require("./db") }),
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
