@@ -24,6 +24,7 @@ exports.register = function (req, res) {
 };
 exports.home = function (req, res) {
   if (req.session.user) {
+    // the second arg in the render method is what we want to pass on the ejs template
     res.render("home-dashboard", { username: req.session.user.username });
   } else {
     res.render("home-guest");
