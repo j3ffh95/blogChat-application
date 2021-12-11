@@ -24,7 +24,7 @@ exports.register = function (req, res) {
 };
 exports.home = function (req, res) {
   if (req.session.user) {
-    res.send("welcome to the actual application!!!");
+    res.render("home-dashboard", { username: req.session.user.username });
   } else {
     res.render("home-guest");
   }
