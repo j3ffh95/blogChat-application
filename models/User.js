@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const usersCollection = require("../db").collection("users");
+const usersCollection = require("../db").db().collection("users");
 const validator = require("validator");
 
 // This is our constructor function (Blueprint)
@@ -71,7 +71,7 @@ User.prototype.login = function () {
         ) {
           resolve("Congrats!!!");
         } else {
-          reject("Invalid");
+          reject("Invalid!");
         }
       })
       .catch(function () {
