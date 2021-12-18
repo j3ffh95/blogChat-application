@@ -13,9 +13,10 @@ exports.login = function (req, res) {
     });
 };
 exports.logout = function (req, res) {
-  // destroy session
-  req.session.destroy();
-  res.send("You are log out.");
+  // destroy session in mongodb
+  req.session.destroy(function () {
+    res.redirect("/");
+  });
 };
 exports.register = function (req, res) {
   let user = new User(req.body);
