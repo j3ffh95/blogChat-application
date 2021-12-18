@@ -12,7 +12,11 @@ exports.login = function (req, res) {
       res.send(error);
     });
 };
-exports.logout = function () {};
+exports.logout = function (req, res) {
+  // destroy session
+  req.session.destroy();
+  res.send("You are log out.");
+};
 exports.register = function (req, res) {
   let user = new User(req.body);
   user.register();
