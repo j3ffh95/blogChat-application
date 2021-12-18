@@ -6,7 +6,9 @@ exports.login = function (req, res) {
     .login()
     .then(function (result) {
       req.session.user = { username: user.data.username };
-      res.send(result);
+      req.session.save(function () {
+        res.redirect("/");
+      });
     })
     .catch(function (error) {
       res.send(error);
