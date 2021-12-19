@@ -14,6 +14,7 @@ let sessionOptions = session({
 });
 
 app.use(sessionOptions);
+app.use(flash());
 
 // HTML Form submit - let express know to add the user submitted data onto our request object, so then we can access it from request.body
 app.use(express.urlencoded({ extended: false }));
