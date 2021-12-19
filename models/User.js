@@ -71,7 +71,7 @@ User.prototype.login = function () {
         ) {
           resolve("Congrats!!!");
         } else {
-          reject("Invalid username / password!");
+          reject("Invalid username / password.");
         }
       })
       .catch(function () {
