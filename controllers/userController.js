@@ -11,7 +11,10 @@ exports.login = function (req, res) {
       });
     })
     .catch(function (error) {
-      res.send(error);
+      req.flash("errors", error);
+      req.session.save(function () {
+        res.redirect("/");
+      });
     });
 };
 exports.logout = function (req, res) {
