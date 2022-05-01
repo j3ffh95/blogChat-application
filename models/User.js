@@ -57,6 +57,9 @@ User.prototype.validate = function () {
   if (this.data.username.length > 30) {
     this.errors.push("username cannot exceed 30 characters");
   }
+
+  // Only if username is valid then check if the username is taken
+
 };
 
 User.prototype.login = function () {
