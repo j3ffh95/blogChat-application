@@ -59,6 +59,9 @@ User.prototype.validate = function () {
   }
 
   // Only if username is valid then check if the username is taken
+  if(this.data.username.length > 2 && this.data.username.length > 31 && validator.isAlphanumeric(this.data.username)) {
+    let usernameExists
+  }
 
 };
 
