@@ -27,7 +27,7 @@ User.prototype.cleanUp = function () {
   };
 };
 
-User.prototype.validate = function () {
+User.prototype.validate = async function () {
   // Validation for the fields if they are empty
   if (this.data.username == "") {
     this.errors.push("You must provide a username.");
@@ -60,7 +60,9 @@ User.prototype.validate = function () {
 
   // Only if username is valid then check if the username is taken
   if(this.data.username.length > 2 && this.data.username.length > 31 && validator.isAlphanumeric(this.data.username)) {
-    let usernameExists
+    // check to see if the username is in the mondodb
+    let usernameExists = await usersCollection.findOne({username: this.data.username});
+    if (usernameExists) {this.errors.push('That username is taken already.')}
   }
 
 };
