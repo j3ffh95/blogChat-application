@@ -65,6 +65,13 @@ User.prototype.validate = async function () {
     if (usernameExists) {this.errors.push('That username is taken already.')}
   }
 
+  // Only if email  is valid then check if the email is taken
+  if(this.data.username.length > 2 && this.data.username.length > 31 && validator.isAlphanumeric(this.data.username)) {
+    // check to see if the username is in the mondodb
+    let usernameExists = await usersCollection.findOne({username: this.data.username});
+    if (usernameExists) {this.errors.push('That username is taken already.')}
+  }
+
 };
 
 User.prototype.login = function () {
