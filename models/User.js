@@ -27,52 +27,55 @@ User.prototype.cleanUp = function () {
   };
 };
 
-User.prototype.validate = async function () {
-  // Validation for the fields if they are empty
-  if (this.data.username == "") {
-    this.errors.push("You must provide a username.");
-  }
-  if (
-    this.data.username != "" &&
-    !validator.isAlphanumeric(this.data.username)
-  ) {
-    this.errors.push("Username can only contain letters and numbers.");
-  }
-  if (!validator.isEmail(this.data.email)) {
-    this.errors.push("You must provide a valid email address.");
-  }
-  if (this.data.password == "") {
-    this.errors.push("You must provide a password.");
-  }
-  // Validate the fields length
-  if (this.data.password.length > 0 && this.data.password.length < 12) {
-    this.errors.push("Password must be at least 12 characters.");
-  }
-  if (this.data.password.length > 50) {
-    this.errors.push("Password cannot exceed 50 characters");
-  }
-  if (this.data.username.length > 0 && this.data.username.length < 3) {
-    this.errors.push("username must be at least 3 characters.");
-  }
-  if (this.data.username.length > 30) {
-    this.errors.push("username cannot exceed 30 characters");
-  }
-
-  // Only if username is valid then check if the username is taken
-  if(this.data.username.length > 2 && this.data.username.length > 31 && validator.isAlphanumeric(this.data.username)) {
-    // check to see if the username is in the mondodb
-    let usernameExists = await usersCollection.findOne({username: this.data.username});
-    if (usernameExists) {this.errors.push('That username is taken already.')}
-  }
-
-  // Only if email  is valid then check if the email is taken
-  if(validator.isEmail(this.data.email)) {
-    // check to see if the email is in the mondodb
-    let emailExists = await usersCollection.findOne({email: this.data.email});
-    if (emailExists) {this.errors.push('That email is taken already.')}
-  }
-
-};
+User.prototype.validate = function() {
+  return new Promise( async (resolve, reject) => {
+    // Validation for the fields if they are empty
+    if (this.data.username == "") {
+      this.errors.push("You must provide a username.");
+    }
+    if (
+      this.data.username != "" &&
+      !validator.isAlphanumeric(this.data.username)
+    ) {
+      this.errors.push("Username can only contain letters and numbers.");
+    }
+    if (!validator.isEmail(this.data.email)) {
+      this.errors.push("You must provide a valid email address.");
+    }
+    if (this.data.password == "") {
+      this.errors.push("You must provide a password.");
+    }
+    // Validate the fields length
+    if (this.data.password.length > 0 && this.data.password.length < 12) {
+      this.errors.push("Password must be at least 12 characters.");
+    }
+    if (this.data.password.length > 50) {
+      this.errors.push("Password cannot exceed 50 characters");
+    }
+    if (this.data.username.length > 0 && this.data.username.length < 3) {
+      this.errors.push("username must be at least 3 characters.");
+    }
+    if (this.data.username.length > 30) {
+      this.errors.push("username cannot exceed 30 characters");
+    }
+  
+    // Only if username is valid then check if the username is taken
+    if(this.data.username.length > 2 && this.data.username.length > 31 && validator.isAlphanumeric(this.data.username)) {
+      // check to see if the username is in the mondodb
+      let usernameExists = await usersCollection.findOne({username: this.data.username});
+      if (usernameExists) {this.errors.push('That username is taken already.')}
+    }
+  
+    // Only if email  is valid then check if the email is taken
+    if(validator.isEmail(this.data.email)) {
+      // check to see if the email is in the mondodb
+      let emailExists = await usersCollection.findOne({email: this.data.email});
+      if (emailExists) {this.errors.push('That email is taken already.')}
+    }
+    resolve()
+  
+  })
+}
 
 User.prototype.login = function () {
   return new Promise((resolve, reject) => {
