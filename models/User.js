@@ -60,9 +60,10 @@ User.prototype.validate = function() {
     }
   
     // Only if username is valid then check if the username is taken
-    if(this.data.username.length > 2 && this.data.username.length > 31 && validator.isAlphanumeric(this.data.username)) {
+    if(this.data.username.length > 2 && this.data.username.length < 31 && validator.isAlphanumeric(this.data.username)) {
       // check to see if the username is in the mondodb
       let usernameExists = await usersCollection.findOne({username: this.data.username});
+      console.log(this.data.username)
       if (usernameExists) {this.errors.push('That username is taken already.')}
     }
   
