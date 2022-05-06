@@ -98,11 +98,11 @@ User.prototype.login = function () {
   });
 };
 
-User.prototype.register = function () {
+User.prototype.register = async function () {
   // call the clean up function to make sure the fields are strings.
   this.cleanUp();
   // Step 1: Validate user data
-  this.validate();
+  await this.validate();
   // Step 2: Only if there are no vaildation errors then save the user data into a database
   if (!this.errors.length) {
     // Hash user password
