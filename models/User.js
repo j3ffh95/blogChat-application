@@ -98,19 +98,24 @@ User.prototype.login = function () {
   });
 };
 
-User.prototype.register = async function () {
-  // call the clean up function to make sure the fields are strings.
-  this.cleanUp();
-  // Step 1: Validate user data
-  await this.validate();
-  // Step 2: Only if there are no vaildation errors then save the user data into a database
-  if (!this.errors.length) {
-    // Hash user password
-    let salt = bcrypt.genSaltSync(10);
-    this.data.password = bcrypt.hashSync(this.data.password, salt);
-    // If there are no errors then CREATE a user in the users collection and pass through it the object of this.data
-    usersCollection.insertOne(this.data);
-  }
-};
+User.prototype.register = function() {
+  return new Promise(async (resolve, reject) => {
+    // call the clean up function to make sure the fields are strings.
+    this.cleanUp();
+    // Step 1: Validate user data
+    await this.validate();
+    // Step 2: Only if there are no vaildation errors then save the user data into a database
+    if (!this.errors.length) {
+      // Hash user password
+      let salt = bcrypt.genSaltSync(10);
+      this.data.password = bcrypt.hashSync(this.data.password, salt);
+      // If there are no errors then CREATE a user in the users collection and pass through it the object of this.data
+      await usersCollection.insertOne(this.data);
+      resolve()
+    } else {
+      reject(this.errors)
+    }
+  })
+}
 
 module.exports = User;
