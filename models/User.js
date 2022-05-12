@@ -119,4 +119,8 @@ User.prototype.register = function() {
   })
 }
 
+User.prototype.getAvatar = function() {
+  
+}
+
 module.exports = User;
