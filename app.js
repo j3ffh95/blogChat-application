@@ -5,14 +5,18 @@ const flash = require("connect-flash");
 const router = require("./router");
 const app = express();
 
+// we need to create a few configuration options for sessions
 let sessionOptions = session({
   secret: "JavaScript is so cool",
   store: new MongoStore({ client: require("./db") }),
   resave: false,
   saveUninitialized: false,
+  // maxAge is how long the cookie for a session should be valid before it expires,
+  // its measured in milliseconds , one day before the cookie expires 
   cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
 });
 
+// Tell express to use sessionOptions
 app.use(sessionOptions);
 app.use(flash());
 
