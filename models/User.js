@@ -63,7 +63,7 @@ User.prototype.validate = function() {
     if(this.data.username.length > 2 && this.data.username.length < 31 && validator.isAlphanumeric(this.data.username)) {
       // check to see if the username is in the mondodb
       let usernameExists = await usersCollection.findOne({username: this.data.username});
-      console.log(this.data.username)
+      // console.log(this.data.username)
       if (usernameExists) {this.errors.push('That username is taken already.')}
     }
   
@@ -105,12 +105,13 @@ User.prototype.register = function() {
     this.cleanUp();
     // Step 1: Validate user data
     await this.validate();
-    // Step 2: Only if there are no vaildation errors then save the user data into a database
+    // Step 2: Only if there are no validation errors then save the user data into a database
     if (!this.errors.length) {
       // Hash user password
+      // First we have to generate a salt to start hashing the pw
       let salt = bcrypt.genSaltSync(10);
       this.data.password = bcrypt.hashSync(this.data.password, salt);
-      // If there are no errors then CREATE a user in the users collection and pass through it the object of this.data
+      // If there are no errors then CREATE(insertOne() method) a user in the users collection and pass through it the object of this.data
       await usersCollection.insertOne(this.data);
       resolve()
     } else {

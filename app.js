@@ -23,7 +23,8 @@ app.use(express.json());
 
 // Let express know we are using the public folder
 app.use(express.static("public"));
-// Set express views so it could know where to look for it (in the views folder)
+// Set express views so it could know where to look for it (in the views folder),
+// second argument is the name of the folder that has our views, in this case is "views"
 app.set("views", "views");
 // let express know which template system/engine we are using
 app.set("view engine", "ejs");
