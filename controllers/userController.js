@@ -6,12 +6,14 @@ exports.login = function (req, res) {
     .login()
     .then(function (result) {
       req.session.user = { username: user.data.username };
+      // manually save the session with the save() method
       req.session.save(function () {
         res.redirect("/");
       });
     })
     .catch(function (error) {
       req.flash("errors", error);
+      // manually save the session with the save() method
       req.session.save(function () {
         res.redirect("/");
       });

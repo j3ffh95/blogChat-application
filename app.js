@@ -17,7 +17,7 @@ let sessionOptions = session({
   cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
 });
 
-// Tell express to use sessionOptions
+// Tell express to use sessionOptions and flash
 app.use(sessionOptions);
 app.use(flash());
 

@@ -73,6 +73,7 @@ User.prototype.validate = function() {
       let emailExists = await usersCollection.findOne({email: this.data.email});
       if (emailExists) {this.errors.push('That email is taken already.')}
     }
+    // call resolve to signify that this operation or promise has completed
     resolve()
   
   })
@@ -121,7 +122,7 @@ User.prototype.register = function() {
 }
 
 User.prototype.getAvatar = function() {
-  
+  this.avatar = `https://gravatar.com/avatar/email?s=128`
 }
 
 module.exports = User;
