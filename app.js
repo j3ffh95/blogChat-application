@@ -8,6 +8,7 @@ const app = express();
 // we need to create a few configuration options for sessions
 let sessionOptions = session({
   secret: "JavaScript is so cool",
+  // setting the store property so it can connect to mongodb
   store: new MongoStore({ client: require("./db") }),
   resave: false,
   saveUninitialized: false,
