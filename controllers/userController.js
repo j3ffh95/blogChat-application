@@ -5,7 +5,7 @@ exports.login = function (req, res) {
   user
     .login()
     .then(function (result) {
-      req.session.user = { username: user.data.username };
+      req.session.user = { avatar: user.avatar, username: user.data.username };
       // manually save the session with the save() method
       req.session.save(function () {
         res.redirect("/");
@@ -31,7 +31,7 @@ exports.register = function (req, res) {
   let user = new User(req.body);
   // console.log(user)
   user.register().then(() => {
-    req.session.user = {username: user.data.username}
+    req.session.user = {username: user.data.username, avatar: user.avatar}
     req.session.save(function() {
       res.redirect('/')
     })
@@ -48,7 +48,7 @@ exports.home = function (req, res) {
   // when we get a get request to the home page we need to check if the req.session.user exist or not 
   if (req.session.user) {
     // the second arg in the render method is what we want to pass on the ejs template
-    res.render("home-dashboard", { username: req.session.user.username });
+    res.render("home-dashboard", { username: req.session.user.username, avatar: req.session.user.avatar });
   } else {
     res.render("home-guest", { errors: req.flash("errors"), regErrors: req.flash('regErrors') });
   }

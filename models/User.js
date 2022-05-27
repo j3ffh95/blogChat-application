@@ -90,6 +90,7 @@ User.prototype.login = function () {
           attemptedUser &&
           bcrypt.compareSync(this.data.password, attemptedUser.password)
         ) {
+          this.getAvatar()
           resolve("Congrats!!!");
         } else {
           reject("Invalid username / password.");
@@ -115,6 +116,8 @@ User.prototype.register = function() {
       this.data.password = bcrypt.hashSync(this.data.password, salt);
       // If there are no errors then CREATE(insertOne() method) a user in the users collection and pass through it the object of this.data
       await usersCollection.insertOne(this.data);
+      // call the avatar function
+      this.getAvatar()
       resolve()
     } else {
       reject(this.errors)
@@ -123,7 +126,7 @@ User.prototype.register = function() {
 }
 
 User.prototype.getAvatar = function() {
-  this.avatar = `https://gravatar.com/avatar/email?s=128`
+  this.avatar = `https://gravatar.com/avatar/${md5(this.data.email)}?s=128`
 }
 
 module.exports = User;
