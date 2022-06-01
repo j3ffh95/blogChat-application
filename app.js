@@ -2,7 +2,6 @@ const express = require("express");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const flash = require("connect-flash");
-const router = require("./router");
 const app = express();
 
 // we need to create a few configuration options for sessions
@@ -13,7 +12,7 @@ let sessionOptions = session({
   resave: false,
   saveUninitialized: false,
   // maxAge is how long the cookie for a session should be valid before it expires,
-  // its measured in milliseconds , one day before the cookie expires 
+  // its measured in milliseconds , one day before the cookie expires
   cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
 });
 
@@ -21,6 +20,16 @@ let sessionOptions = session({
 app.use(sessionOptions);
 app.use(flash());
 
+// app.use is telling Express to run this function for every request.
+// And because we are including this before our router, this means this will run first
+app.use(function (req, res, next) {
+  // the locals object will be able from within our ejs templates
+  res.locals.user = req.session.user;
+  // Since we are calling next(), Express will move on to run the actual relevant functions for a particular route
+  next();
+});
+
+const router = require("./router");
 // HTML Form submit - let express know to add the user submitted data onto our request object, so then we can access it from request.body
 app.use(express.urlencoded({ extended: false }));
 // Let express know about sending Json data
