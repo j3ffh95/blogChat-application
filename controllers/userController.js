@@ -62,10 +62,7 @@ exports.home = function (req, res) {
   // when we get a get request to the home page we need to check if the req.session.user exist or not
   if (req.session.user) {
     // the second arg in the render method is what we want to pass on the ejs template
-    res.render("home-dashboard", {
-      username: req.session.user.username,
-      avatar: req.session.user.avatar,
-    });
+    res.render("home-dashboard");
   } else {
     res.render("home-guest", {
       errors: req.flash("errors"),
