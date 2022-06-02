@@ -1,5 +1,3 @@
-const { post } = require("../app");
-
 const postsCollection = require("../db").db().collection("posts");
 // we are going to turn the author id to a mongo id with this package
 const ObjectID = require("mongodb").ObjectID;
@@ -51,6 +49,23 @@ Post.prototype.create = function () {
         });
     } else {
       reject(this.errors);
+    }
+  });
+};
+
+// Parent Functions
+Post.findSingleById = function (id) {
+  return new Promise(async function (resolve, reject) {
+    // check to see if the id is a string or is a Mongo Object ID
+    if (typeof id != "string" || !ObjectID.isValid(id)) {
+      reject();
+      return;
+    }
+    let post = await postsCollection.findOne({ _id: new ObjectID(id) });
+    if (post) {
+      resolve(post);
+    } else {
+      reject();
     }
   });
 };
