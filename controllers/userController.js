@@ -16,7 +16,12 @@ exports.login = function (req, res) {
   user
     .login()
     .then(function (result) {
-      req.session.user = { avatar: user.avatar, username: user.data.username };
+      // setting up the user object to the session object, giving it a avatar, username and id property
+      req.session.user = {
+        avatar: user.avatar,
+        username: user.data.username,
+        _id: user.data._id,
+      };
       // manually save the session with the save() method
       req.session.save(function () {
         res.redirect("/");
