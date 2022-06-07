@@ -95,8 +95,15 @@ exports.ifUserExists = function (req, res, next) {
 exports.profilePostsScreen = function (req, res) {
   // console.log(req.profileUser);
   // Ask our post model for posts by a certain author id
-  res.render("profile", {
-    profileUsername: req.profileUser.username,
-    profileAvatar: req.profileUser.avatar,
-  });
+  Post.findByAuthorId(req.profileUser._id)
+    .then(function (posts) {
+      res.render("profile", {
+        posts: posts,
+        profileUsername: req.profileUser.username,
+        profileAvatar: req.profileUser.avatar,
+      });
+    })
+    .catch(function () {
+      res.render("404");
+    });
 };
