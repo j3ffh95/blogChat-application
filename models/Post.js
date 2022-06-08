@@ -55,6 +55,47 @@ Post.prototype.create = function () {
 };
 
 // Parent Functions
+Post.reusablePostQuery = function (uniqueOperations) {
+  return new Promise(async function (resolve, reject) {
+    // Created a variable to store the aggregate array and concat
+
+    let aggOperations = uniqueOperations.concat([
+      {
+        // Here we use the aggregate method to use the lookup property of MOngoDB and look for
+        // the author in another table or group which is the users.
+        // the project property is to overwrite the author to contain not only the id but the authorDocument
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "authorDocument",
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          body: 1,
+          createdDate: 1,
+          author: { $arrayElemAt: ["$authorDocument", 0] },
+        },
+      },
+    ]);
+
+    let posts = await postsCollection.aggregate(aggOperations).toArray();
+
+    // Clean up author property in each post object
+    posts = posts.map(function (post) {
+      post.author = {
+        username: post.author.username,
+        avatar: new User(post.author, true).avatar,
+      };
+      return post;
+    });
+
+    resolve(posts);
+  });
+};
+
 Post.findSingleById = function (id) {
   return new Promise(async function (resolve, reject) {
     // check to see if the id is a string or is a Mongo Object ID
@@ -62,30 +103,10 @@ Post.findSingleById = function (id) {
       reject();
       return;
     }
-    // Here we use the aggregate method to use the lookup property of MOngoDB and look for
-    // the author in another table or group which is the users.
-    // the project property is to overwrite the author to contain not only the id but the authorDocument
-    let posts = await postsCollection
-      .aggregate([
-        { $match: { _id: new ObjectID(id) } },
-        {
-          $lookup: {
-            from: "users",
-            localField: "author",
-            foreignField: "_id",
-            as: "authorDocument",
-          },
-        },
-        {
-          $project: {
-            title: 1,
-            body: 1,
-            createdDate: 1,
-            author: { $arrayElemAt: ["$authorDocument", 0] },
-          },
-        },
-      ])
-      .toArray();
+
+    let posts = await Post.reusablePostQuery([
+      { $match: { _id: new ObjectID(id) } },
+    ]);
 
     // Clean up author property in each post object
     posts = posts.map(function (post) {
@@ -103,6 +124,13 @@ Post.findSingleById = function (id) {
       reject();
     }
   });
+};
+
+Post.findByAuthorId = function (authorId) {
+  return Post.reusablePostQuery([
+    { $match: { author: authorId } },
+    { $sort: { createdDate: -1 } },
+  ]);
 };
 
 module.exports = Post;
