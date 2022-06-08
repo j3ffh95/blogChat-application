@@ -29,5 +29,5 @@ router.post(
 );
 router.get("/post/:id", postController.viewSingle);
 
-// Export the router
+// Export the router to be used in other files
 module.exports = router;
