@@ -1,5 +1,4 @@
 const postsCollection = require("../db").db().collection("posts");
-// we are going to turn the author id to a mongo id with this package
 const ObjectID = require("mongodb").ObjectID;
 const User = require("./User");
 
@@ -25,6 +24,7 @@ Post.prototype.cleanUp = function () {
     author: ObjectID(this.userid),
   };
 };
+
 Post.prototype.validate = function () {
   if (this.data.title == "") {
     this.errors.push("You must provide a title.");
@@ -33,6 +33,7 @@ Post.prototype.validate = function () {
     this.errors.push("You must provide post content.");
   }
 };
+
 Post.prototype.create = function () {
   return new Promise((resolve, reject) => {
     this.cleanUp();
@@ -54,16 +55,10 @@ Post.prototype.create = function () {
   });
 };
 
-// Parent Functions
 Post.reusablePostQuery = function (uniqueOperations) {
   return new Promise(async function (resolve, reject) {
-    // Created a variable to store the aggregate array and concat
-
     let aggOperations = uniqueOperations.concat([
       {
-        // Here we use the aggregate method to use the lookup property of MOngoDB and look for
-        // the author in another table or group which is the users.
-        // the project property is to overwrite the author to contain not only the id but the authorDocument
         $lookup: {
           from: "users",
           localField: "author",
@@ -83,12 +78,13 @@ Post.reusablePostQuery = function (uniqueOperations) {
 
     let posts = await postsCollection.aggregate(aggOperations).toArray();
 
-    // Clean up author property in each post object
+    // clean up author property in each post object
     posts = posts.map(function (post) {
       post.author = {
         username: post.author.username,
         avatar: new User(post.author, true).avatar,
       };
+
       return post;
     });
 
@@ -98,7 +94,6 @@ Post.reusablePostQuery = function (uniqueOperations) {
 
 Post.findSingleById = function (id) {
   return new Promise(async function (resolve, reject) {
-    // check to see if the id is a string or is a Mongo Object ID
     if (typeof id != "string" || !ObjectID.isValid(id)) {
       reject();
       return;
@@ -108,17 +103,8 @@ Post.findSingleById = function (id) {
       { $match: { _id: new ObjectID(id) } },
     ]);
 
-    // Clean up author property in each post object
-    posts = posts.map(function (post) {
-      post.author = {
-        username: post.author.username,
-        avatar: new User(post.author, true).avatar,
-      };
-      return post;
-    });
-
     if (posts.length) {
-      // console.log(posts[0]);
+      console.log(posts[0]);
       resolve(posts[0]);
     } else {
       reject();

@@ -3,7 +3,6 @@ const usersCollection = require("../db").db().collection("users");
 const validator = require("validator");
 const md5 = require("md5");
 
-// This is our constructor function (Blueprint)
 let User = function (data, getAvatar) {
   this.data = data;
   this.errors = [];
@@ -15,7 +14,6 @@ let User = function (data, getAvatar) {
   }
 };
 
-// This cleanUp func makes sure the input fields are type of strings
 User.prototype.cleanUp = function () {
   if (typeof this.data.username != "string") {
     this.data.username = "";
@@ -26,7 +24,8 @@ User.prototype.cleanUp = function () {
   if (typeof this.data.password != "string") {
     this.data.password = "";
   }
-  // Get rid of any bogus properties, make sure the data is the properties we need by updating the data  object
+
+  // get rid of any bogus properties
   this.data = {
     username: this.data.username.trim().toLowerCase(),
     email: this.data.email.trim().toLowerCase(),
@@ -36,7 +35,6 @@ User.prototype.cleanUp = function () {
 
 User.prototype.validate = function () {
   return new Promise(async (resolve, reject) => {
-    // Validation for the fields if they are empty
     if (this.data.username == "") {
       this.errors.push("You must provide a username.");
     }
@@ -52,47 +50,42 @@ User.prototype.validate = function () {
     if (this.data.password == "") {
       this.errors.push("You must provide a password.");
     }
-    // Validate the fields length
     if (this.data.password.length > 0 && this.data.password.length < 12) {
       this.errors.push("Password must be at least 12 characters.");
     }
     if (this.data.password.length > 50) {
-      this.errors.push("Password cannot exceed 50 characters");
+      this.errors.push("Password cannot exceed 50 characters.");
     }
     if (this.data.username.length > 0 && this.data.username.length < 3) {
-      this.errors.push("username must be at least 3 characters.");
+      this.errors.push("Username must be at least 3 characters.");
     }
     if (this.data.username.length > 30) {
-      this.errors.push("username cannot exceed 30 characters");
+      this.errors.push("Username cannot exceed 30 characters.");
     }
 
-    // Only if username is valid then check if the username is taken
+    // Only if username is valid then check to see if it's already taken
     if (
       this.data.username.length > 2 &&
       this.data.username.length < 31 &&
       validator.isAlphanumeric(this.data.username)
     ) {
-      // check to see if the username is in the mondodb
       let usernameExists = await usersCollection.findOne({
         username: this.data.username,
       });
-      // console.log(this.data.username)
       if (usernameExists) {
-        this.errors.push("That username is taken already.");
+        this.errors.push("That username is already taken.");
       }
     }
 
-    // Only if email  is valid then check if the email is taken
+    // Only if email is valid then check to see if it's already taken
     if (validator.isEmail(this.data.email)) {
-      // check to see if the email is in the mondodb
       let emailExists = await usersCollection.findOne({
         email: this.data.email,
       });
       if (emailExists) {
-        this.errors.push("That email is taken already.");
+        this.errors.push("That email is already being used.");
       }
     }
-    // call resolve to signify that this operation or promise has completed
     resolve();
   });
 };
@@ -109,7 +102,7 @@ User.prototype.login = function () {
         ) {
           this.data = attemptedUser;
           this.getAvatar();
-          resolve("Congrats!!!");
+          resolve("Congrats!");
         } else {
           reject("Invalid username / password.");
         }
@@ -122,19 +115,17 @@ User.prototype.login = function () {
 
 User.prototype.register = function () {
   return new Promise(async (resolve, reject) => {
-    // call the clean up function to make sure the fields are strings.
+    // Step #1: Validate user data
     this.cleanUp();
-    // Step 1: Validate user data
     await this.validate();
-    // Step 2: Only if there are no validation errors then save the user data into a database
+
+    // Step #2: Only if there are no validation errors
+    // then save the user data into a database
     if (!this.errors.length) {
-      // Hash user password
-      // First we have to generate a salt to start hashing the pw
+      // hash user password
       let salt = bcrypt.genSaltSync(10);
       this.data.password = bcrypt.hashSync(this.data.password, salt);
-      // If there are no errors then CREATE(insertOne() method) a user in the users collection and pass through it the object of this.data
       await usersCollection.insertOne(this.data);
-      // call the avatar function
       this.getAvatar();
       resolve();
     } else {
@@ -153,7 +144,6 @@ User.findByUsername = function (username) {
       reject();
       return;
     }
-
     usersCollection
       .findOne({ username: username })
       .then(function (userDoc) {

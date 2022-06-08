@@ -5,7 +5,7 @@ exports.mustBeLoggedIn = function (req, res, next) {
   if (req.session.user) {
     next();
   } else {
-    req.flash("errors", "You must be logged in to perform that action");
+    req.flash("errors", "You must be logged in to perform that action.");
     req.session.save(function () {
       res.redirect("/");
     });
@@ -17,20 +17,17 @@ exports.login = function (req, res) {
   user
     .login()
     .then(function (result) {
-      // setting up the user object to the session object, giving it a avatar, username and id property
       req.session.user = {
         avatar: user.avatar,
         username: user.data.username,
         _id: user.data._id,
       };
-      // manually save the session with the save() method
       req.session.save(function () {
         res.redirect("/");
       });
     })
-    .catch(function (error) {
-      req.flash("errors", error);
-      // manually save the session with the save() method
+    .catch(function (e) {
+      req.flash("errors", e);
       req.session.save(function () {
         res.redirect("/");
       });
@@ -38,7 +35,6 @@ exports.login = function (req, res) {
 };
 
 exports.logout = function (req, res) {
-  // destroy session in mongodb
   req.session.destroy(function () {
     res.redirect("/");
   });
@@ -46,7 +42,6 @@ exports.logout = function (req, res) {
 
 exports.register = function (req, res) {
   let user = new User(req.body);
-  // console.log(user)
   user
     .register()
     .then(() => {
@@ -68,10 +63,9 @@ exports.register = function (req, res) {
       });
     });
 };
+
 exports.home = function (req, res) {
-  // when we get a get request to the home page we need to check if the req.session.user exist or not
   if (req.session.user) {
-    // the second arg in the render method is what we want to pass on the ejs template
     res.render("home-dashboard");
   } else {
     res.render("home-guest", {
@@ -93,8 +87,7 @@ exports.ifUserExists = function (req, res, next) {
 };
 
 exports.profilePostsScreen = function (req, res) {
-  // console.log(req.profileUser);
-  // Ask our post model for posts by a certain author id
+  // ask our post model for posts by a certain author id
   Post.findByAuthorId(req.profileUser._id)
     .then(function (posts) {
       res.render("profile", {
