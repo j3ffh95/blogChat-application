@@ -23,7 +23,15 @@ app.use(flash());
 // app.use is telling Express to run this function for every request.
 // And because we are including this before our router, this means this will run first
 app.use(function (req, res, next) {
+  // make current user id available on the req object\
+  if (req.session.user) {
+    req.visitorId = req.session.user._id;
+  } else {
+    req.visitorId = 0;
+  }
+
   // the locals object will be able from within our ejs templates
+  // make user session data available from within view templates
   res.locals.user = req.session.user;
   // Since we are calling next(), Express will move on to run the actual relevant functions for a particular route
   next();
