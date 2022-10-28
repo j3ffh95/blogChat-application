@@ -20,7 +20,7 @@ exports.viewSingle = async function (req, res) {
   try {
     // we use a parent function to find the post by id
     // we use the params object to search for the id pass in the req
-    let post = await Post.findSingleById(req.params.id);
+    let post = await Post.findSingleById(req.params.id, req.visitorId);
     // console.log(post);
     res.render("single-post-screen", { post: post });
   } catch {
