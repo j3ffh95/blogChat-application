@@ -1,11 +1,13 @@
 const User = require("../models/User");
 const Post = require("../models/Post");
 
+// This function makes sure user is logging before allowing them to make user permission actions
 exports.mustBeLoggedIn = function (req, res, next) {
   if (req.session.user) {
     next();
   } else {
     req.flash("errors", "You must be logged in to perform that action.");
+    // manually save our session data, make sure it actually completes before redirecting them
     req.session.save(function () {
       res.redirect("/");
     });
