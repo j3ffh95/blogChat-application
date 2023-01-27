@@ -13,7 +13,7 @@ let sessionOptions = session({
   saveUninitialized: false,
   // maxAge is how long the cookie for a session should be valid before it expires,
   // its measured in milliseconds , one day before the cookie expires
-  cookie: { maxAge: 2000 * 60 * 60 * 24, httpOnly: true },
+  cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
 });
 
 // Tell express to use sessionOptions and flash
